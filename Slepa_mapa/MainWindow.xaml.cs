@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -18,9 +18,9 @@ namespace it2a_spol_blind_map
     {
         List<MapPoint> points = new List<MapPoint>()
         {
-            new MapPoint { Name = "Praha",       XPercent = 0.4150, YPercent = 0.2850 },
-            new MapPoint { Name = "Brno",        XPercent = 0.6150, YPercent = 0.6150 },
-            new MapPoint { Name = "Ostrava",     XPercent = 0.7800, YPercent = 0.2200 },
+            new MapPoint { Name = "Praha",       XPercent = 0.3519, YPercent = 0.3916 },
+            new MapPoint { Name = "Brno",        XPercent = 0.6864, YPercent = 0.6958 },
+            new MapPoint { Name = "Ostrava",     XPercent = 0.8562, YPercent = 0.4570 },
         };
 
         private MapPoint currentActive;
@@ -39,7 +39,8 @@ namespace it2a_spol_blind_map
 
         private void StartNewRound()
         {
-
+            currentActive = points[rnd.Next(points.Count)];
+            Aktivni_Mesto.Text = $"Aktivní město: {currentActive.Name}";
         }
 
         void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -63,7 +64,9 @@ namespace it2a_spol_blind_map
 
                 Button btn = new Button()
                 {
-                    Content = point.Name,
+                    Content = "X",
+                    Width = 20,
+                    Height = 20,
                     Tag = point
                 };
 
@@ -80,8 +83,26 @@ namespace it2a_spol_blind_map
         {
             Button btn = sender as Button;
             MapPoint point = btn.Tag as MapPoint;
+            if (point == currentActive)
+            {
+                skore++;
+                MessageBox.Show("Správně");
+            } else
+            {
+                MessageBox.Show($"Špatně, správná odpověď byla {currentActive.Name}");
+            }
+            celkemKol++;
+            if (celkemKol == maxKol)
+            {
+                MessageBox.Show($"Konec hry! Skóre: {skore}/{celkemKol}");
+                skore = 0;
+                celkemKol = 0;
+            } else
+            {
+                StartNewRound();
+            }
 
-            MessageBox.Show(point.Name);
+
         }
         private void MapImage_MouseDown(object sender, MouseButtonEventArgs e)
         {
